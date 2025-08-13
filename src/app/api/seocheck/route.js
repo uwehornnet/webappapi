@@ -9,6 +9,12 @@ export async function GET(req) {
 		return new Response(JSON.stringify({ error: "No URL provided" }), { status: 400 });
 	}
 
+	const headers = {
+		"Access-Control-Allow-Origin": "*", // in Produktion besser nur deine Domain
+		"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+		"Access-Control-Allow-Headers": "Content-Type",
+	};
+
 	try {
 		// HTTPS Check
 		const isHttps = targetUrl.startsWith("https://");
@@ -196,7 +202,7 @@ export async function GET(req) {
 
 		return new Response(JSON.stringify(report), {
 			status: 200,
-			headers: { "Content-Type": "application/json" },
+			headers,
 		});
 	} catch (err) {
 		return new Response(JSON.stringify({ error: err.message }), { status: 500 });
