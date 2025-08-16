@@ -504,7 +504,12 @@ export async function GET(req) {
 		const expandKeywords = (words) => [...words, ...generateNGrams(words, 2), ...generateNGrams(words, 3)];
 
 		// Keywords
-		const primaryKeywords = Array.from(new Set(expandKeywords([...titleWords, ...h1Words])));
+		const primaryCandidates = expandKeywords([...titleWords, ...h1Words]);
+		const primaryKeywords = Array.from(
+			new Set(
+				primaryCandidates.filter((kw) => title.toLowerCase().includes(kw) && h1Words.join(" ").includes(kw))
+			)
+		);
 		const secondaryKeywords = Array.from(new Set(expandKeywords(h2h3Words)));
 
 		// Body Text for keyword density
